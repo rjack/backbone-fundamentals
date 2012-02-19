@@ -5,11 +5,18 @@
     <link rel="stylesheet" type="text/css" href="css/screen.css">
   </head>
   <body>
-    <h1>My Cookbook</h1>
+    <div id="content">
+      <h1>My Cookbook</h1>
+    </div>
+
     <script type="text/javascript" src="js/json2.js"></script>
     <script type="text/javascript" src="js/jquery-1.7.1.js"></script>
     <script type="text/javascript" src="js/underscore.js"></script>
     <script type="text/javascript" src="js/backbone.js"></script>
     <script type="text/javascript" src="js/cookbook.js"></script>
+
+    <script id="recipe-list-view-template" type="text/x-template">
+      <%= title %>, by <%= author %>
+    </script>
   </body>
 </html>
