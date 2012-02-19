@@ -37,6 +37,10 @@ app.get('/recipes/:id', function (req, res) {
     res.send(recipe);
 });
 
+app.get('/recipes', function (req, res) {
+    res.send(recipes);
+});
+
 app.post('/recipes', function (req, res) {
     var recipe  = req.body;
     recipe.id = recipes.length;
