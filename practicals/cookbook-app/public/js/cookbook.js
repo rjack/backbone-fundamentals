@@ -8,6 +8,8 @@
 
 Recipe = Backbone.Model.extend({
 
+    urlRoot: "recipes",
+
     validate: function (attrs) {
         if (!attrs.author) {
             return "Author not set";
@@ -26,7 +28,7 @@ Recipes = Backbone.Collection.extend({
 
     model: Recipe,
 
-    url: '/recipes'
+    url: 'recipes'
 });
 
 
@@ -36,12 +38,19 @@ RecipeListView = Backbone.View.extend({
 
     id: "recipes",
 
-    initialize: function () {
+    initialize: function (options) {
         _.bindAll(this, 'addItem', 'render');
+        this.collection.on("add", this.addItem);
+        this.collection.fetch({
+            success: this.render,
+            error: function (coll, res) { alert("Errore!"); }
+        });
     },
 
     addItem: function (model) {
-        var itemView = new RecipeListItemView({model: model});
+        var itemView = new RecipeListItemView({
+            model: model
+        });
         itemView.render();
         $(this.el).append(itemView.el);
     },
@@ -55,42 +64,70 @@ RecipeListItemView = Backbone.View.extend({
 
     tagName: "li",
 
-    className: "clickable",
-
-    initialize: function () {
+    initialize: function (options) {
         _.bindAll(this, "render");
     },
 
-    events: {
-        "click": "open"
+    render: function () {
+        var template = $("#recipe-list-view-template").html(),
+            context = this.model.toJSON();
+
+        context.href = '#' + this.model.url();
+        $(this.el).html(_.template(template, context));
+    },
+});
+
+
+RecipeView = Backbone.View.extend({
+
+    el: "#content",
+
+    initialize: function (options) {
+        _.bindAll(this, 'render');
+        this.model.on('change', this.render);
     },
 
     render: function () {
-        var template = $("#recipe-list-view-template").html();
-        $(this.el).html(_.template(template, this.model.toJSON()));
+        var template = $("#recipe-template").html(),
+            context = this.model.toJSON();
+
+        $(this.el).html(_.template(template, context));
+    }
+});
+
+
+Router = Backbone.Router.extend({
+
+    routes: {
+        "": "showRecipeList",
+        "recipes/:id": "showRecipe"
     },
 
-    open: function () {
-        console.log(this.model.toJSON());
+
+    showRecipeList: function () {
+        var recipes = new Recipes();
+        var view = new RecipeListView({
+            collection: recipes
+        });
+
+        view.render();
+        $("#content").html(view.el);
+    },
+
+
+    showRecipe: function (id) {
+        var recipe = new Recipe({id: id});
+        var view = new RecipeView({model: recipe});
+        recipe.fetch({
+            error: function () {
+                alert ("Error fetching recipe " + id);
+            }
+        });
     }
 });
 
 
 $(function () {
-    var recipes = new Recipes(),
-        list = new RecipeListView({
-            collection: recipes
-        });
-
-    window.recipes = recipes;
-
-    list.render();
-    $("#content").append(list.el);
-
-    recipes.on("add", list.addItem);
-
-    recipes.fetch({
-        success: function (coll, res) { list.render(); },
-        error: function (coll, res) { alert("Errore!"); }
-    });
+    var router = new Router();
+    Backbone.history.start();
 });

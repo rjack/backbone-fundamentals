@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>My Cookbook</title>
+    <title>Recipes</title>
     <link rel="stylesheet" type="text/css" href="css/screen.css">
   </head>
   <body>
     <div id="content">
-      <h1>My Cookbook</h1>
     </div>
 
     <script type="text/javascript" src="js/json2.js"></script>
@@ -16,7 +15,13 @@
     <script type="text/javascript" src="js/cookbook.js"></script>
 
     <script id="recipe-list-view-template" type="text/x-template">
-      <%= title %>, by <%= author %>
+      <a href="<%= href %>"><%= title %></a>, by <%= author %>
+    </script>
+
+    <script id="recipe-template" type="text/x-template">
+      <h1><%= title %></h1>
+      <h2>by <%= author %></h2>
+      <p><%= instructions %></p>
     </script>
   </body>
 </html>
