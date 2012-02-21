@@ -6,6 +6,21 @@
  */
 
 
+Backbone.View.prototype.close = function () {
+    this.undelegateEvents();
+};
+
+
+$(function () {
+    var APP = {};
+    window.APP = APP;
+
+    APP.router = new Router();
+
+    Backbone.history.start({pushState: false});
+});
+
+
 Recipe = Backbone.Model.extend({
 
     urlRoot: "recipes",
@@ -34,15 +49,13 @@ Recipes = Backbone.Collection.extend({
 
 Page = Backbone.View.extend({
 
-    el: "#content",
-
     initialize: function (options) {
-        this.template = $(options.template).html();
+        this.template = _.template($(options.template).html());
         this.context = options.context || {};
     },
 
     render: function () {
-        $(this.el).html(_.template(this.template, this.context));
+        $(this.el).html(this.template(this.context));
         return this;
     }
 });
@@ -68,7 +81,7 @@ RecipeFormPage = Page.extend({
             });
         ev.preventDefault();
         recipe.on("sync", function () {
-            window.router.navigate("recipes/" + recipe.id, {trigger: true});
+            APP.router.navigate("recipes/" + recipe.id, {trigger: true});
         });
         recipe.save();
     }
@@ -77,29 +90,44 @@ RecipeFormPage = Page.extend({
 
 RecipeListView = Backbone.View.extend({
 
-    el: "#content",
-
     initialize: function (options) {
-        _.bindAll(this, 'addItem', 'render');
-        //this.collection.on("add", this.addItem);
-        this.collection.fetch({
-            success: this.render,
-            error: function (coll, res) { alert("Errore!"); }
-        });
+        _.bindAll(this, 'createChildView', 'renderChildViews', 'render');
+        $(this.el).html(_.template($("#recipe-list-page-template").html()));
     },
 
-    addItem: function (model) {
+    createChildView: function (model) {
         var itemView = new RecipeListItemView({
             model: model
         });
-        itemView.render();
-        $(this.el).find("#recipes").append(itemView.el);
+        return itemView;
+    },
+
+    renderChildViews: function (ul, li) {
+        ul.append(li.render().el);
+        return ul;
     },
 
     render: function () {
-        var template = $("#recipe-list-page-template").html();
-        $(this.el).html(_.template(template, {}));
-        this.collection.each(this.addItem);
+        var self = this,
+            list = $(this.el).find("#recipes");
+        this.collection.fetch({
+            success: function () {
+                self.childViews = self.collection.chain().map(self.createChildView);
+                self.childViews.reduce(self.renderChildViews, list);
+            },
+            error: function () {
+                alert("RecipeListView: cannot fetch collection");
+            }
+        });
+
+        return this;
+    },
+
+    close: function () {
+        this.childViews.each(function (child) {
+            child.close();
+        });
+        Backbone.View.prototype.close.call(this);
     }
 });
 
@@ -109,32 +137,44 @@ RecipeListItemView = Backbone.View.extend({
 
     initialize: function (options) {
         _.bindAll(this, "render");
+        this.template = _.template($("#recipe-list-item-template").html());
+    },
+
+    events: {
+        "click": "open"
     },
 
     render: function () {
-        var template = $("#recipe-list-item-template").html(),
-            context = this.model.toJSON();
-
+        context = this.model.toJSON();
         context.href = '#' + this.model.url();
-        $(this.el).html(_.template(template, context));
+
+        $(this.el).html(this.template(context));
+
+        return this;
+    },
+
+    open: function (ev) {
+        console.log("CLICK", ev);
     }
 });
 
 
 RecipeView = Backbone.View.extend({
 
-    el: "#content",
-
     initialize: function (options) {
         _.bindAll(this, 'render');
-        this.model.on('change', this.render);
+        this.template = _.template($("#recipe-template").html());
     },
 
     render: function () {
-        var template = $("#recipe-template").html(),
-            context = this.model.toJSON();
+        var self = this;
 
-        $(this.el).html(_.template(template, context));
+        this.model.fetch({
+            success: function () {
+                $(self.el).html(self.template(self.model.toJSON()));
+            }
+        });
+        return this;
     }
 });
 
@@ -148,35 +188,33 @@ Router = Backbone.Router.extend({
         "recipes/:id": "showRecipe"
     },
 
+    switchView: function (view) {
+        if (this.currentView) {
+            this.currentView.close();
+        }
+        this.currentView = view;
+    },
+
 
     showRecipeList: function () {
-        var recipes = new Recipes();
         var view = new RecipeListView({
-            collection: recipes
-        });
-
-        view.render();
+                collection: new Recipes()
+            });
+        this.switchView(view);
+        $("#content").html(view.render().el);
     },
 
 
     showRecipe: function (id) {
-        var recipe = new Recipe({id: id});
-        var view = new RecipeView({model: recipe});
-        recipe.fetch({
-            error: function () {
-                alert ("Error fetching recipe " + id);
-            }
-        });
+        var recipe = new Recipe({id: id}),
+            view = new RecipeView({model: recipe});
+        this.switchView(view);
+        $("#content").html(view.render().el);
     },
 
     showForm: function () {
         var view = new RecipeFormPage();
-        view.render();
+        this.switchView(view);
+        $("#content").html(view.render().el);
     }
-});
-
-
-$(function () {
-    window.router = new Router();
-    Backbone.history.start({pushState: false});
 });
