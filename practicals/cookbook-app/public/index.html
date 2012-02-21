@@ -14,6 +14,14 @@
     <script type="text/javascript" src="js/backbone.js"></script>
     <script type="text/javascript" src="js/cookbook.js"></script>
 
+    <script id="recipe-list-page-template" type="text/x-template">
+      <h1>Recipes</h1>
+      <ul id="recipes"></ul>
+      <div>
+        <a href="#recipes/new">Add new recipe</a>
+      </div>
+    </script>
+
     <script id="recipe-list-item-template" type="text/x-template">
       <a href="<%= href %>"><%= title %></a>, by <%= author %>
     </script>
@@ -22,6 +30,9 @@
       <h1><%= title %></h1>
       <h2>by <%= author %></h2>
       <p><%= instructions %></p>
+      <div>
+        <a href="#recipes">Browse recipes</a>
+      </div>
     </script>
 
     <script id="recipe-form-template" type="text/x-template">

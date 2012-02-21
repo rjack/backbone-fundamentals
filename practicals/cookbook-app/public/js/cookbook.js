@@ -48,7 +48,7 @@ Page = Backbone.View.extend({
 });
 
 
-RecipeFormView = Page.extend({
+RecipeFormPage = Page.extend({
 
     initialize: function (options) {
         options = options || {};
@@ -77,13 +77,11 @@ RecipeFormView = Page.extend({
 
 RecipeListView = Backbone.View.extend({
 
-    tagName: "ul",
-
-    id: "recipes",
+    el: "#content",
 
     initialize: function (options) {
         _.bindAll(this, 'addItem', 'render');
-        this.collection.on("add", this.addItem);
+        //this.collection.on("add", this.addItem);
         this.collection.fetch({
             success: this.render,
             error: function (coll, res) { alert("Errore!"); }
@@ -95,10 +93,12 @@ RecipeListView = Backbone.View.extend({
             model: model
         });
         itemView.render();
-        $(this.el).append(itemView.el);
+        $(this.el).find("#recipes").append(itemView.el);
     },
 
     render: function () {
+        var template = $("#recipe-list-page-template").html();
+        $(this.el).html(_.template(template, {}));
         this.collection.each(this.addItem);
     }
 });
@@ -143,6 +143,7 @@ Router = Backbone.Router.extend({
 
     routes: {
         "": "showRecipeList",
+        "recipes": "showRecipeList",
         "recipes/new": "showForm",
         "recipes/:id": "showRecipe"
     },
@@ -155,7 +156,6 @@ Router = Backbone.Router.extend({
         });
 
         view.render();
-        $("#content").html(view.el);
     },
 
 
@@ -170,7 +170,7 @@ Router = Backbone.Router.extend({
     },
 
     showForm: function () {
-        var view = new RecipeFormView();
+        var view = new RecipeFormPage();
         view.render();
     }
 });
