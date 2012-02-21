@@ -14,7 +14,7 @@
     <script type="text/javascript" src="js/backbone.js"></script>
     <script type="text/javascript" src="js/cookbook.js"></script>
 
-    <script id="recipe-list-view-template" type="text/x-template">
+    <script id="recipe-list-item-template" type="text/x-template">
       <a href="<%= href %>"><%= title %></a>, by <%= author %>
     </script>
 
@@ -22,6 +22,20 @@
       <h1><%= title %></h1>
       <h2>by <%= author %></h2>
       <p><%= instructions %></p>
+    </script>
+
+    <script id="recipe-form-template" type="text/x-template">
+      <h1>New recipe</h1>
+
+      <form id="new-recipe" name="new-recipe">
+        <label for="input-title">Title</label><br>
+        <input type="text" id="input-title" name="input-title"><br>
+        <label for="input-author">Author</label><br>
+        <input type="text" id="input-author" name="input-author"><br>
+        <label for="input-instructions">Instructions</label><br>
+        <textarea id="input-instructions" name="input-instructions"></textarea><br>
+        <input type="submit" value="Send">
+      </form>
     </script>
   </body>
 </html>

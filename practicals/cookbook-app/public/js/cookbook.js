@@ -32,6 +32,49 @@ Recipes = Backbone.Collection.extend({
 });
 
 
+Page = Backbone.View.extend({
+
+    el: "#content",
+
+    initialize: function (options) {
+        this.template = $(options.template).html();
+        this.context = options.context || {};
+    },
+
+    render: function () {
+        $(this.el).html(_.template(this.template, this.context));
+        return this;
+    }
+});
+
+
+RecipeFormView = Page.extend({
+
+    initialize: function (options) {
+        options = options || {};
+        options.template = "#recipe-form-template";
+        Page.prototype.initialize.call(this, options);
+    },
+
+    events: {
+        "submit": "sendForm"
+    },
+
+    sendForm: function (ev) {
+        var recipe = new Recipe({
+                title: $("#input-title").val(),
+                author: $("#input-author").val(),
+                instructions: $("#input-instructions").val()
+            });
+        ev.preventDefault();
+        recipe.on("sync", function () {
+            window.router.navigate("recipes/" + recipe.id, {trigger: true});
+        });
+        recipe.save();
+    }
+});
+
+
 RecipeListView = Backbone.View.extend({
 
     tagName: "ul",
@@ -69,12 +112,12 @@ RecipeListItemView = Backbone.View.extend({
     },
 
     render: function () {
-        var template = $("#recipe-list-view-template").html(),
+        var template = $("#recipe-list-item-template").html(),
             context = this.model.toJSON();
 
         context.href = '#' + this.model.url();
         $(this.el).html(_.template(template, context));
-    },
+    }
 });
 
 
@@ -100,6 +143,7 @@ Router = Backbone.Router.extend({
 
     routes: {
         "": "showRecipeList",
+        "recipes/new": "showForm",
         "recipes/:id": "showRecipe"
     },
 
@@ -123,11 +167,16 @@ Router = Backbone.Router.extend({
                 alert ("Error fetching recipe " + id);
             }
         });
+    },
+
+    showForm: function () {
+        var view = new RecipeFormView();
+        view.render();
     }
 });
 
 
 $(function () {
-    var router = new Router();
-    Backbone.history.start();
+    window.router = new Router();
+    Backbone.history.start({pushState: false});
 });
