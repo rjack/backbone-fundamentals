@@ -34,7 +34,13 @@ app.configure('production', function(){
 
 app.get('/recipes/:id', function (req, res) {
     var recipe = recipes[req.params.id];
-    res.send(recipe);
+    if (!recipe) {
+        res.send({
+            error: "recipe not found"
+        }, 404);
+    } else {
+        res.send(recipe);
+    }
 });
 
 app.get('/recipes', function (req, res) {
