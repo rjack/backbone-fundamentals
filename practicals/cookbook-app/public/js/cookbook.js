@@ -6,11 +6,6 @@
  */
 
 
-Backbone.View.prototype.close = function () {
-    this.undelegateEvents();
-};
-
-
 $(function () {
     var APP = {};
     window.APP = APP;
@@ -122,13 +117,6 @@ RecipeListView = Backbone.View.extend({
 
         return this;
     },
-
-    close: function () {
-        this.childViews.each(function (child) {
-            child.close();
-        });
-        Backbone.View.prototype.close.call(this);
-    }
 });
 
 RecipeListItemView = Backbone.View.extend({
@@ -197,7 +185,7 @@ Router = Backbone.Router.extend({
 
     switchView: function (view) {
         if (this.currentView) {
-            this.currentView.close();
+            this.currentView.remove();
         }
         this.currentView = view;
     },
