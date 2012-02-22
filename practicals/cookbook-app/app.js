@@ -56,7 +56,11 @@ app.get('/recipes', function (req, res) {
     for (i = 0; i < recipes.length; i++) {
         item = recipes[i];
         if (item) {
-            list.push(item);
+            list.push({
+                title: item.title,
+                author: item.author,
+                id: item.id
+            });
         }
     }
     res.send(list);
