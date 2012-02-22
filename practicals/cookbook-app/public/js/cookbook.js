@@ -166,6 +166,10 @@ RecipeView = Backbone.View.extend({
         this.template = _.template($("#recipe-template").html());
     },
 
+    events: {
+        "click button.delete": "deleteRecipe"
+    },
+
     render: function () {
         var self = this;
 
@@ -175,6 +179,17 @@ RecipeView = Backbone.View.extend({
             }
         });
         return this;
+    },
+
+    deleteRecipe: function () {
+        this.model.destroy({
+            error: function () {
+                alert ("RecipeView: cannot destroy " + this.model.get("title"));
+            },
+            success: function () {
+                APP.router.navigate("recipes", {trigger: true});
+            }
+        });
     }
 });
 
