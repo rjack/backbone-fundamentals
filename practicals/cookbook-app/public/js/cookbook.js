@@ -140,10 +140,6 @@ RecipeListItemView = Backbone.View.extend({
         this.template = _.template($("#recipe-list-item-template").html());
     },
 
-    events: {
-        "click": "open"
-    },
-
     render: function () {
         context = this.model.toJSON();
         context.href = '#' + this.model.url();
@@ -151,10 +147,6 @@ RecipeListItemView = Backbone.View.extend({
         $(this.el).html(this.template(context));
 
         return this;
-    },
-
-    open: function (ev) {
-        console.log("CLICK", ev);
     }
 });
 
