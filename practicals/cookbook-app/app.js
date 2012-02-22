@@ -33,18 +33,33 @@ app.configure('production', function(){
 // Routes
 
 app.get('/recipes/:id', function (req, res) {
-    var recipe = recipes[req.params.id];
-    if (!recipe) {
-        res.send({
+    var recipe,
+        id = req.params.id;
+    if (id >= recipes.length) {
+        return res.send({
             error: "recipe not found"
         }, 404);
-    } else {
-        res.send(recipe);
     }
+
+    recipe = recipes[id];
+    if (!recipe) {
+        return res.send({
+            error: "recipe gone"
+        }, 410);
+    }
+
+    res.send(recipe);
 });
 
 app.get('/recipes', function (req, res) {
-    res.send(recipes);
+    var i, item, list = [];
+    for (i = 0; i < recipes.length; i++) {
+        item = recipes[i];
+        if (item) {
+            list.push(item);
+        }
+    }
+    res.send(list);
 });
 
 app.post('/recipes', function (req, res) {
@@ -67,6 +82,15 @@ app.put('/recipes/:id', function (req, res) {
         }
     }
     res.send(response);
+});
+
+
+app.delete('/recipes/:id', function (req, res) {
+    var id = req.params.id;
+    if (recipes[id]) {
+        delete(recipes[id]);
+    }
+    res.send(204);
 });
 
 app.listen(3000);
