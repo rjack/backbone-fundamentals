@@ -79,6 +79,10 @@ RecipeFormPage = Page.extend({
             APP.router.navigate("recipes/" + recipe.id, {trigger: true});
         });
         recipe.save();
+    },
+
+    focusFirstInput: function () {
+        $(this.el).find("input:first").focus();
     }
 });
 
@@ -211,5 +215,6 @@ Router = Backbone.Router.extend({
         var view = new RecipeFormPage();
         this.switchView(view);
         $("#content").html(view.render().el);
+        view.focusFirstInput();
     }
 });
