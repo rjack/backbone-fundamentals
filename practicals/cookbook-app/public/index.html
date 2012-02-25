@@ -14,6 +14,22 @@
     <script type="text/javascript" src="js/backbone.js"></script>
     <script type="text/javascript" src="js/cookbook.js"></script>
 
+    <script id="login-form-template" type="text/x-template">
+      <h1>Login</h1>
+      <form id="login-form">
+        <label for="input-username">User</label><br>
+        <input type="text" id="input-username" name="input-username" autofocus><br>
+        <label for="input-password">Password</label><br>
+        <input type="password" id="input-password" name="input-password"><br>
+        <input type="checkbox" value="remember" name="input-remember" id="input-remember"><label for="input-remember">Ricordami</label>
+        <input type="submit" value="Login"><br>
+      </form>
+      <ul>
+        <li><a href="#users/forgot">Password dimenticata?</a></li>
+        <li><a href="#users/new">Nuovo utente?</a></li>
+      </ul>
+    </script>
+
     <script id="recipe-list-page-template" type="text/x-template">
       <h1>Recipes</h1>
       <ul id="recipes"></ul>

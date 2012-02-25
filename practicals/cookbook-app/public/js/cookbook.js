@@ -42,6 +42,15 @@ Recipes = Backbone.Collection.extend({
 });
 
 
+Auth = Backbone.Model.extend({
+
+    url: function () {
+        return 'users/auth';
+    }
+
+});
+
+
 Page = Backbone.View.extend({
 
     initialize: function (options) {
@@ -52,6 +61,40 @@ Page = Backbone.View.extend({
     render: function () {
         $(this.el).html(this.template(this.context));
         return this;
+    }
+});
+
+LoginFormPage = Page.extend({
+
+    initialize: function (options) {
+        options = options || {};
+        options.template = "#login-form-template";
+        Page.prototype.initialize.call(this, options);
+    },
+
+
+    events: {
+        "submit": "sendForm"
+    },
+
+    sendForm: function (ev) {
+        var login = new Auth({
+                username: $("#input-username").val(),
+                password: $("#input-password").val(),
+                remember: $("#input-remember:checked").val()
+            });
+        ev.preventDefault();
+        login.on("sync", function () {
+            APP.router.navigate("", {trigger: true});
+        });
+        login.on("error", function () {
+            alert("Ahia...");
+        });
+        login.save();
+    },
+
+    focusFirstInput: function () {
+        $(this.el).find("input:first").focus();
     }
 });
 
@@ -120,7 +163,7 @@ RecipeListView = Backbone.View.extend({
         });
 
         return this;
-    },
+    }
 });
 
 RecipeListItemView = Backbone.View.extend({
@@ -184,7 +227,8 @@ Router = Backbone.Router.extend({
         "": "showRecipeList",
         "recipes": "showRecipeList",
         "recipes/new": "showForm",
-        "recipes/:id": "showRecipe"
+        "recipes/:id": "showRecipe",
+        "users/login": "showLoginForm"
     },
 
     switchView: function (view) {
@@ -213,6 +257,13 @@ Router = Backbone.Router.extend({
 
     showForm: function () {
         var view = new RecipeFormPage();
+        this.switchView(view);
+        $("#content").html(view.render().el);
+        view.focusFirstInput();
+    },
+
+    showLoginForm: function () {
+        var view = new LoginFormPage();
         this.switchView(view);
         $("#content").html(view.render().el);
         view.focusFirstInput();
