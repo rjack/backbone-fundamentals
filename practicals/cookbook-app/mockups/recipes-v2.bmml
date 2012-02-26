@@ -10,7 +10,7 @@
         <text>Recipes</text>
       </controlProperties>
     </control>
-    <control controlID="2" controlTypeID="com.balsamiq.mockups::LinkBar" x="285" y="119" w="-1" h="-1" measuredW="266" measuredH="21" zOrder="2" locked="false" isInGroup="-1">
+    <control controlID="2" controlTypeID="com.balsamiq.mockups::LinkBar" x="285" y="119" w="-1" h="-1" measuredW="267" measuredH="21" zOrder="2" locked="false" isInGroup="-1">
       <controlProperties>
         <selectedIndex>0</selectedIndex>
         <text>Recipes%2C%20Contribute%2C%20Login%2C%20Register</text>
@@ -47,7 +47,7 @@
         <text>*RECIPES%20PAGE*%0A%20%0A*1.%20Navigation%20bar*%0A%20%0ALinks%20change%20whether%20the%20user%20is%20logged%20in%20or%20not.%0A%20%0A*2.%20Recipe%20list*%0A%20%0ARecipes%20can%20be%20sorted%20by%20column.%0ARecipes%20are%20filtered%20by%20search%20criteria.%0ARecipes%20are%20paginated.%0AClick%20on%20a%20recipe%20to%20open%20it.</text>
       </controlProperties>
     </control>
-    <control controlID="11" controlTypeID="com.balsamiq.mockups::CallOut" x="551" y="109" w="-1" h="-1" measuredW="37" measuredH="37" zOrder="9" locked="false" isInGroup="-1">
+    <control controlID="11" controlTypeID="com.balsamiq.mockups::CallOut" x="551" y="109" w="-1" h="-1" measuredW="37" measuredH="39" zOrder="9" locked="false" isInGroup="-1">
       <controlProperties>
         <text>1</text>
       </controlProperties>
@@ -57,13 +57,13 @@
         <text>1</text>
       </controlProperties>
     </control>
-    <control controlID="13" controlTypeID="com.balsamiq.mockups::CallOut" x="551" y="185" w="-1" h="-1" measuredW="39" measuredH="40" zOrder="11" locked="false" isInGroup="-1">
+    <control controlID="13" controlTypeID="com.balsamiq.mockups::CallOut" x="551" y="185" w="-1" h="-1" measuredW="39" measuredH="37" zOrder="11" locked="false" isInGroup="-1">
       <controlProperties>
         <text>2</text>
       </controlProperties>
     </control>
     <control controlID="14" controlTypeID="com.balsamiq.mockups::SearchBox" x="458" y="152" w="93" h="-1" measuredW="65" measuredH="25" zOrder="12" locked="false" isInGroup="-1"/>
-    <control controlID="15" controlTypeID="com.balsamiq.mockups::LinkBar" x="75" y="329" w="-1" h="-1" measuredW="104" measuredH="21" zOrder="13" locked="false" isInGroup="-1">
+    <control controlID="15" controlTypeID="com.balsamiq.mockups::LinkBar" x="75" y="329" w="-1" h="-1" measuredW="103" measuredH="21" zOrder="13" locked="false" isInGroup="-1">
       <controlProperties>
         <text>previous%2C%20next</text>
       </controlProperties>
@@ -80,7 +80,7 @@
     </control>
     <control controlID="19" controlTypeID="com.balsamiq.mockups::BrowserWindow" x="60" y="660" w="506" h="398" measuredW="450" measuredH="400" zOrder="16" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>Register%0Ahttp%3A//.../%23users/new%3Fnext%3Drecipes/new</text>
+        <text>Register%0Ahttp%3A//localhost/%23users/new</text>
       </controlProperties>
     </control>
     <control controlID="20" controlTypeID="com.balsamiq.mockups::Title" x="75" y="749" w="-1" h="-1" measuredW="156" measuredH="50" zOrder="17" locked="false" isInGroup="-1">
@@ -144,7 +144,7 @@
             <text>Weak%20password</text>
           </controlProperties>
         </control>
-        <control controlID="9" controlTypeID="com.balsamiq.mockups::Button" x="104" y="147" w="140" h="27" measuredW="74" measuredH="27" zOrder="9" locked="false" isInGroup="41">
+        <control controlID="9" controlTypeID="com.balsamiq.mockups::Button" x="104" y="147" w="140" h="27" measuredW="75" measuredH="27" zOrder="9" locked="false" isInGroup="41">
           <controlProperties>
             <state>disabled</state>
             <text>Register</text>
@@ -170,17 +170,12 @@
         </control>
       </groupChildrenDescriptors>
     </control>
-    <control controlID="42" controlTypeID="com.balsamiq.mockups::CallOut" x="458" y="681" w="-1" h="-1" measuredW="38" measuredH="40" zOrder="19" locked="false" isInGroup="-1">
+    <control controlID="43" controlTypeID="com.balsamiq.mockups::StickyNote" x="619" y="660" w="291" h="316" measuredW="109" measuredH="123" zOrder="19" locked="false" isInGroup="-1">
       <controlProperties>
-        <text>3</text>
+        <text>*REGISTRATION*%0A%20%0A*4.%20Form%20validation*%0A%20%0AUser%20is%20not%20allowed%20to%20register%20if%20there%20are%20validation%20errors%20%28red%20X%20messages%29.%0A%20%0AIn%20this%20example%2C%20the%20choosen%20nickname%20is%20already%20in%20use%20and%20the%20%22Register%22%20button%20is%20disabled.</text>
       </controlProperties>
     </control>
-    <control controlID="43" controlTypeID="com.balsamiq.mockups::StickyNote" x="619" y="660" w="291" h="316" measuredW="109" measuredH="123" zOrder="20" locked="false" isInGroup="-1">
-      <controlProperties>
-        <text>*REGISTRATION*%0A%20%0A*3.%20What%27s%20next%3F*%0A%20%0AThe%20user%20will%20be%20taken%20to%20the%20location%20specified%20in%20the%20%60next%60%20parameter%20after%20the%20form%20is%20submitted.%0A%20%0A*4.%20Form%20validation*%0A%20%0AUser%20is%20not%20allowed%20to%20register%20if%20there%20are%20validation%20errors%20%28red%20X%20messages%29.%0A%20%0AIn%20this%20example%2C%20the%20choosen%20nickname%20is%20already%20in%20use%20and%20the%20%22Register%22%20button%20is%20disabled.</text>
-      </controlProperties>
-    </control>
-    <control controlID="44" controlTypeID="com.balsamiq.mockups::CallOut" x="496" y="823" w="-1" h="-1" measuredW="39" measuredH="40" zOrder="21" locked="false" isInGroup="-1">
+    <control controlID="44" controlTypeID="com.balsamiq.mockups::CallOut" x="496" y="823" w="-1" h="-1" measuredW="39" measuredH="39" zOrder="20" locked="false" isInGroup="-1">
       <controlProperties>
         <text>4</text>
       </controlProperties>
