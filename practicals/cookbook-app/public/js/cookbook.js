@@ -121,6 +121,22 @@ RecipeFormPage = Page.extend({
         recipe.on("sync", function () {
             APP.router.navigate("recipes/" + recipe.id, {trigger: true});
         });
+        recipe.on("error", function (model, xhr) {
+            var res = JSON.parse(xhr.responseText);
+            var code = xhr.status;
+            var route;
+
+            if (code === 403) {
+                route = res.solve.substr(1);
+                // TODO: push current sync operation into `APP.todo.login`
+                // `APP.todo.XXX` is a stack of operations that must be
+                // resumed after XXX occurs.
+                APP.router.navigate(route, {trigger: true});
+            } else {
+                alert("Unknown error " + code);
+                console.log(res);
+            }
+        });
         recipe.save();
     },
 
