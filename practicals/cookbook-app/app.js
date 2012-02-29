@@ -48,7 +48,8 @@ function checkAuth (req, res, next) {
         next();
     } else {
         res.send({
-            error: "please login"
+            error: "unauthorized",
+            solve: "/users/login"
         }, 403);
     }
 }
@@ -61,14 +62,16 @@ app.get('/recipes/:id', function (req, res) {
         id = req.params.id;
     if (id >= recipes.length) {
         return res.send({
-            error: "recipe not found"
+            error: "not found",
+            solve: "/search"
         }, 404);
     }
 
     recipe = recipes[id];
     if (!recipe) {
         return res.send({
-            error: "recipe gone"
+            error: "gone",
+            solve: "/search"
         }, 410);
     }
 
