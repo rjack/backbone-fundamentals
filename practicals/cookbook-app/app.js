@@ -4,11 +4,11 @@
  */
 
 var express = require('express'),
+    redis = require('redis'),
     routes = require('./routes');
 
 var app = module.exports = express.createServer();
 
-var recipes = [];
 var users = {
     "foo": {
         "password": "bar"
@@ -16,6 +16,8 @@ var users = {
 };
 
 var ONE_WEEK = 604800000;
+
+var r = redis.createClient();
 
 // Configuration
 
@@ -58,24 +60,18 @@ function checkAuth (req, res, next) {
 // Routes
 
 app.get('/recipes/:id', function (req, res) {
-    var recipe,
-        id = req.params.id;
-    if (id >= recipes.length) {
-        return res.send({
-            error: "not found",
-            solve: "/search"
-        }, 404);
-    }
+    var id = req.params.id;
 
-    recipe = recipes[id];
-    if (!recipe) {
-        return res.send({
-            error: "gone",
-            solve: "/search"
-        }, 410);
-    }
-
-    res.send(recipe);
+    r.hgetall("recipes:" + id, function (err, recipe) {
+        if (err) {
+            return res.send({
+                error: "not found",
+                solve: "/search"
+            }, 404);
+        } else {
+            res.send(recipe);
+        }
+    });
 });
 
 app.get('/recipes', function (req, res) {
@@ -144,5 +140,11 @@ app.post('/users/auth', function (req, res) {
 });
 
 
-app.listen(3000);
-console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+r.on("error", redis.print);
+
+r.on("ready", function () {
+    // TODO: read db_id from argv
+    // TODO: r.select(db_id);
+    app.listen(3000);
+    console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+});
