@@ -10,6 +10,13 @@
 * `recipes`: set of recipe ids
 * `recipes:<id>`: hash containg recipe informations
 
+## Identifiers
+
+`INCR` these to get a suitable id.
+
+* `id:recipes`
+* `id:users`
+
 ## Indexes
 
 Sorted sets are used as indexes for recipes.
