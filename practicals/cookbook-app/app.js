@@ -24,7 +24,14 @@ var isEmptyObject = function (obj) {
         return false;
     }
     return true;
-}
+};
+
+
+var checkInternalError = function () {
+    if (arguments[0]) {
+
+    }
+};
 
 // Configuration
 
@@ -100,11 +107,29 @@ app.get('/recipes', function (req, res) {
     res.send(list);
 });
 
-app.post('/recipes', checkAuth, function (req, res) {
+app.post('/recipes', /* checkAuth,*/ function (req, res) {
     var recipe  = req.body;
-    recipe.id = recipes.length;
-    recipes.push(recipe);
-    res.send(recipe);
+
+    recipe.created_at = (new Date()).toISOString();
+
+    r.incr("id:recipes", function (err, id) {
+        if (err)
+            return res.send(err, 500);
+        r.hmset("recipes:" + id, recipe, function (err, ret) {
+            if (err)
+                return res.send(err, 500);
+            r.zadd("index:recipes:by_created_at", id, recipe.created_at, function (err, ret) {
+                if (err) {
+                    console.log(err)
+                    return res.send(err, 500);
+                } else {
+                    var location = "/recipes/" + id;
+                    res.header("Location", location);
+                    res.send({created: location}, 201);
+                }
+            });
+        });
+    });
 });
 
 app.put('/recipes/:id', checkAuth, function (req, res) {
