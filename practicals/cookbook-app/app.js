@@ -19,6 +19,13 @@ var ONE_WEEK = 604800000;
 
 var r = redis.createClient();
 
+var isEmptyObject = function (obj) {
+    for (var name in obj) {
+        return false;
+    }
+    return true;
+}
+
 // Configuration
 
 app.configure(function(){
@@ -64,7 +71,11 @@ app.get('/recipes/:id', function (req, res) {
 
     r.hgetall("recipes:" + id, function (err, recipe) {
         if (err) {
-            return res.send({
+            res.send({
+                error: err
+            }, 500);
+        } else if (isEmptyObject(recipe)) {
+            res.send({
                 error: "not found",
                 solve: "/search"
             }, 404);
