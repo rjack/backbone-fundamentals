@@ -1,0 +1,55 @@
+// Sample collection of recipes
+{
+    "collection": {
+        "version": "1.0",
+        "href": "/recipes",
+        "links": [],
+        "items": [
+            {
+                "href": "/recipes/0",
+                "data": [
+                    {"name": "author", "value": "Ciccio", "prompt": "Author"},
+                    {"name": "title", "value": "Pepata di cozze", "prompt": "Title"},
+                    {"name": "description", "value": "Lorem ipsum sic amet...", "prompt": "Description"},
+                    {"name": "difficulty", "value": "3", "prompt": "Difficulty"}
+                ],
+                "links": []
+            },
+            {
+                "href": "/recipes/1",
+                "data": [
+                    {"name": "author", "value": "JoeAcchino", "prompt": "Author"},
+                    {"name": "title", "value": "Tagliatelle alla vaccona", "prompt": "Title"},
+                    {"name": "description", "value": "Lorem ipsum sic amet...", "prompt": "Description"},
+                    {"name": "difficulty", "value": "4", "prompt": "Difficulty"}
+                ],
+                "links": [
+                    {"href": "/recipes/0/photo", "rel": "image", "prompt": "Picture", "name": "image", "render": "img"}
+                ]
+            }
+        ],
+        "queries": [
+            {
+                "href": "/recipes",
+                "rel": "search",
+                "prompt": "Search recipes",
+                "data": [
+                    {"name": "search", "value": ""}
+                ]
+            }
+        ],
+        "template": {
+            "data": [
+                {"name": "author", "value": "", "prompt": "Author"},
+                {"name": "title", "value": "", "prompt": "Title"},
+                {"name": "description", "value": "", "prompt": "Description"},
+                {"name": "difficulty", "value": "", "prompt": "Difficulty"}
+            ]
+        },
+        "error": {
+            "code": "",
+            "message": "",
+            "title": ""
+        }
+    }
+}
