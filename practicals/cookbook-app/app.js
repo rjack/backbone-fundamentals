@@ -27,12 +27,6 @@ var isEmptyObject = function (obj) {
 };
 
 
-var checkInternalError = function () {
-    if (arguments[0]) {
-
-    }
-};
-
 // Configuration
 
 app.configure(function(){
