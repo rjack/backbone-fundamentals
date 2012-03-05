@@ -127,17 +127,17 @@ app.get('/recipes', function (req, res) {
 app.post('/recipes', /* checkAuth,*/ function (req, res) {
     var recipe  = req.body;
 
-    recipe.created_at = (new Date()).toISOString();
+    recipe.created = Date.now();
 
     r.incr("id:recipes", function (err, id) {
         if (err)
             return res.send(err, 500);
+        recipe.id = id;
         r.hmset("recipes:" + id, recipe, function (err, ret) {
             if (err)
                 return res.send(err, 500);
-            r.zadd("index:recipes:by_created_at", id, recipe.created_at, function (err, ret) {
+            r.zadd("index:recipes:by:created", recipe.created, id, function (err, ret) {
                 if (err) {
-                    console.log(err)
                     return res.send(err, 500);
                 } else {
                     var location = "/recipes/" + id;
