@@ -3,7 +3,8 @@
  * Module dependencies.
  */
 
-var express = require('express'),
+var a = require("async"),
+    express = require('express'),
     redis = require('redis'),
     routes = require('./routes');
 
@@ -86,19 +87,41 @@ app.get('/recipes/:id', function (req, res) {
     });
 });
 
+/*
+ * /recipes?page=1&per-page=10&desc=true&by=rating
+ */
 app.get('/recipes', function (req, res) {
-    var i, item, list = [];
-    for (i = 0; i < recipes.length; i++) {
-        item = recipes[i];
-        if (item) {
-            list.push({
-                title: item.title,
-                author: item.author,
-                id: item.id
+    // TODO: params validation
+    var page = Number(req.query.page) || 1,
+        per_page = Number(req.query['per-page']) || 10,
+        sort = req.query.sort || "desc",
+        by = req.query.by || 'created',
+        command = (sort === "desc" ? 'zrevrange' : 'zrange'),
+        start = (page - 1) * per_page,
+        stop = start + per_page - 1;
+
+
+    r[command]("index:recipes:by:" + by, start, stop, function (err, arr) {
+        var fn = function (id, cb) {
+            r.hmget("recipes:" + id, 'title', 'author', 'created', function (err, ret) {
+                if (err)
+                    return cb(err);
+                cb(null, {
+                    "id": id,
+                    "title": ret[0],
+                    "author": ret[1],
+                    "created": (new Date(Number(ret[2]))).toISOString()
+                });
             });
-        }
-    }
-    res.send(list);
+        };
+        a.map(arr, fn, function (err, list) {
+            if (err) {
+                res.send(err, 500);
+            } else {
+                res.send(list, 200);
+            }
+        });
+    });
 });
 
 app.post('/recipes', /* checkAuth,*/ function (req, res) {
